@@ -9,15 +9,17 @@ APP_NAME="MacKeys-Configurator"
 APP_ID="com.mackeysconfigurator.app"
 APP_DIR="dist/AppDir"
 
-echo "Building AppImage for $APP_NAME..."
+# 1. Get version from package.json
+VERSION=$(node -e "console.log(require('./package.json').version)")
+echo "Building AppImage for $APP_NAME version $VERSION..."
 
-# 1. Ensure SEA build is ready
+# 2. Ensure SEA build is ready
 if [ ! -f dist/app ] || [ ! -f dist/gtkx.node ]; then
     echo "SEA build not found. Running build:sea first..."
     npm run build:sea
 fi
 
-# 2. Prepare AppDir
+# 3. Prepare AppDir
 echo "Preparing AppDir..."
 rm -rf "$APP_DIR"
 mkdir -p "$APP_DIR/usr/bin"
@@ -26,12 +28,12 @@ mkdir -p "$APP_DIR/usr/bin"
 cp dist/app "$APP_DIR/usr/bin/mackeys-configurator"
 cp dist/gtkx.node "$APP_DIR/usr/bin/gtkx.node"
 
-# 3. Handle Assets (Icons and Desktop)
+# 4. Handle Assets (Icons and Desktop)
 # appimagetool expects at least one .desktop file and one icon in the root
 cp "$APP_ID.desktop" "$APP_DIR/mackeys-configurator.desktop"
 cp assets/icon.png "$APP_DIR/mackeys-configurator.png"
 
-# 4. Create AppRun (The entry point)
+# 5. Create AppRun (The entry point)
 echo "Creating AppRun..."
 cat > "$APP_DIR/AppRun" <<EOF
 #!/bin/sh
@@ -41,18 +43,19 @@ exec "\$HERE/usr/bin/mackeys-configurator" "\$@"
 EOF
 chmod +x "$APP_DIR/AppRun"
 
-# 5. Get/Update appimagetool
+# 6. Get/Update appimagetool
 if [ ! -f ./appimagetool ]; then
     echo "Downloading appimagetool..."
     curl -Lo appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
     chmod +x appimagetool
 fi
 
-# 6. Build AppImage
+# 7. Build AppImage
 echo "Generating AppImage..."
 export ARCH=x86_64
-./appimagetool --appimage-extract-and-run "$APP_DIR" "$APP_NAME-x86_64.AppImage"
+OUTPUT_FILE="$APP_NAME-$VERSION-x86_64.AppImage"
+./appimagetool --appimage-extract-and-run "$APP_DIR" "$OUTPUT_FILE"
 
 echo ""
 echo "AppImage build complete!"
-echo "File: $APP_NAME-x86_64.AppImage"
+echo "File: $OUTPUT_FILE"

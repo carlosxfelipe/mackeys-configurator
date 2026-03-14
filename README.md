@@ -45,7 +45,7 @@ Para criar o AppImage do Mackeys Configurator:
    npm run build:appimage
    ```
 
-O arquivo AppImage será gerado na raiz do projeto com o nome `MacKeys-Configurator-x86_64.AppImage`.
+O arquivo AppImage será gerado na raiz do projeto com o nome seguindo o padrão `MacKeys-Configurator-[versão]-x86_64.AppImage`.
 
 Se necessário, o script irá baixar o `appimagetool` automaticamente.
 
@@ -55,5 +55,9 @@ Além do AppImage, você pode usar outros scripts de build disponíveis em `pack
 
 - `npm run build:sea` — Gera o executável nativo (SEA)
 - `npm run build:flatpak` — Gera e instala o Flatpak localmente (requer `flatpak-builder`)
+
+## Licença
+
+Este projeto está licenciado sob a GNU General Public License v3.0 (GPLv3).
 
 Sinta-se à vontade para abrir issues ou contribuir!
