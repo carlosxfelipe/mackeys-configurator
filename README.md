@@ -25,6 +25,10 @@ npm run dev
 
 O projeto estará disponível para desenvolvimento local.
 
+## Screenshot
+
+![Tela principal do Mackeys Configurator](assets/screenshot-main.png)
+
 ---
 
 Sinta-se à vontade para abrir issues ou contribuir!
