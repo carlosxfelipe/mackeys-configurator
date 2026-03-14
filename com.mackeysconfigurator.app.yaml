@@ -1,0 +1,49 @@
+app-id: com.mackeysconfigurator.app
+runtime: org.gnome.Platform
+runtime-version: "48"
+sdk: org.gnome.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node22
+command: mackeys-configurator
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --device=shm # Often needed for Electron/Node apps
+
+build-options:
+  append-path: /usr/lib/sdk/node22/bin
+  env:
+    npm_config_nodedir: /usr/lib/sdk/node22
+  no-debuginfo: true
+  strip: false
+
+modules:
+  - name: mackeys-configurator
+    buildsystem: simple
+    build-commands:
+      # Build SEA blob inside Flatpak
+      - node --experimental-sea-config sea-config.json
+      - cp /usr/lib/sdk/node22/bin/node mackeys-configurator
+      # Note: We need postject. In the example it was in vendor/.
+      # We'll use the one from node_modules if possible or a simple script.
+      - npx postject mackeys-configurator NODE_SEA_BLOB dist/sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2
+      
+      - install -Dm755 mackeys-configurator /app/bin/mackeys-configurator
+      - install -Dm755 dist/gtkx.node /app/bin/gtkx.node
+      - mkdir -p /app/share/mackeys-configurator
+      - if [ -d dist/assets ]; then cp -r dist/assets/* /app/share/mackeys-configurator/; fi
+      # Desktop file and icons
+      - install -Dm644 com.mackeysconfigurator.app.desktop /app/share/applications/com.mackeysconfigurator.app.desktop
+      - if [ -f assets/icon.png ]; then install -Dm644 assets/icon.png /app/share/icons/hicolor/256x256/apps/com.mackeysconfigurator.app.png; fi
+    sources:
+      - type: dir
+        path: .
+        skip:
+          - .git
+          - .flatpak-builder
+          - build-dir
+          - flatpak-repo
+          - node_modules
+          - deploying

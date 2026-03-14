@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=MacKeys Configurator
+Exec=mackeys-configurator
+Icon=com.mackeysconfigurator.app
+Type=Application
+Categories=Utility;
+Comment=Configure your MacKeys keyboard
+Terminal=false
