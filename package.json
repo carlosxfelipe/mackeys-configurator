@@ -10,6 +10,7 @@
         "start": "node dist/bundle.js",
         "bundle": "gtkx build && tsx scripts/bundle.ts",
         "build:sea": "bash scripts/build-sea.sh",
+        "build:appimage": "bash scripts/build-appimage.sh",
         "build:flatpak": "bash scripts/build-flatpak.sh"
     },
     "gtkx": {

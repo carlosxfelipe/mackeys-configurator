@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=MacKeys Configurator
 Exec=mackeys-configurator
-Icon=com.mackeysconfigurator.app
+Icon=mackeys-configurator
 Type=Application
 Categories=Utility;
 Comment=Configure your MacKeys keyboard
