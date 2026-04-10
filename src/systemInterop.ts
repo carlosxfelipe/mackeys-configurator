@@ -102,7 +102,7 @@ export async function enableMacMode(): Promise<string> {
   await applySession(LAYOUT, VARIANT, OPTION);
   const persistent = await applyPersistent(LAYOUT, VARIANT, OPTION);
 
-  return `🍎 Ctrl esquerdo trocado com Alt esquerdo. Layout alterado para US Internacional. \nPersistente em: ${
+  return `Ctrl esquerdo trocado com Alt esquerdo. Layout alterado para US Internacional. \nPersistente em: ${
     persistent.join(", ") || "Nenhum"
   }`;
 }
@@ -111,7 +111,7 @@ export async function disableMacMode(): Promise<string> {
   await applySession(LAYOUT, VARIANT);
   const persistent = await applyPersistent(LAYOUT, VARIANT);
 
-  return `🔄 Troca de Ctrl e Alt desfeita. \nPersistente em: ${
+  return `Troca de Ctrl e Alt desfeita. \nPersistente em: ${
     persistent.join(", ") || "Nenhum"
   }`;
 }
@@ -120,7 +120,7 @@ export async function applyAbnt2(): Promise<string> {
   await applySession("br", "");
   const persistent = await applyPersistent("br", "");
 
-  return `🔄 Layout ABNT2 aplicado. \nPersistente em: ${
+  return `Layout ABNT2 aplicado. \nPersistente em: ${
     persistent.join(", ") || "Nenhum"
   }`;
 }
@@ -131,9 +131,78 @@ export async function setupCedilha(): Promise<string> {
     const xcomposePath = path.join(homeDir, ".XCompose");
 
     await fs.writeFile(xcomposePath, XCOMPOSE_CONTENT, "utf-8");
-    return `✅ Cedilha configurada em: ${xcomposePath}\nReinicie o aplicativo ou faça logout/login para ativar.`;
+    return `Cedilha configurada em: ${xcomposePath}\nReinicie o aplicativo ou faça logout/login para ativar.`;
   } catch (error: unknown) {
     const err = error as Error;
-    throw new Error(`\n❌ Erro ao criar .XCompose: ${err.message}`);
+    throw new Error(`\nErro ao criar .XCompose: ${err.message}`);
   }
+}
+
+const WM_SCHEMAS = [
+  {
+    schema: "org.gnome.desktop.wm.keybindings",
+    key: "close",
+    label: "GNOME",
+  },
+  {
+    schema: "org.cinnamon.desktop.keybindings.wm",
+    key: "close",
+    label: "Cinnamon",
+  },
+];
+
+async function getCloseKeybindings(
+  schema: string,
+  key: string,
+): Promise<string[]> {
+  const { stdout, success } = await runCommand(
+    `gsettings get ${schema} ${key}`,
+  );
+  if (!success) return [];
+  try {
+    // Converte o formato gvariant ['<Alt>F4'] para array JS
+    return JSON.parse(stdout.trim().replace(/'/g, '"'));
+  } catch {
+    return [];
+  }
+}
+
+export async function setupCmdQ(): Promise<string> {
+  const applied: string[] = [];
+
+  for (const { schema, key, label } of WM_SCHEMAS) {
+    if (!(await schemaAvailable(schema))) continue;
+
+    const current = await getCloseKeybindings(schema, key);
+    if (!current.includes("<Control>q")) {
+      const updated = [...current, "<Control>q"];
+      const value = `"${JSON.stringify(updated).replace(/"/g, "'")}"`;
+      await runCommand(`gsettings set ${schema} ${key} ${value}`);
+    }
+    applied.push(label);
+  }
+
+  if (applied.length === 0) {
+    return "Nenhum schema de gerenciador de janelas encontrado (GNOME/Cinnamon).";
+  }
+
+  return `Cmd+Q configurado para fechar janelas.\nAtivo em: ${applied.join(", ")}`;
+}
+
+export async function removeCmdQ(): Promise<string> {
+  const applied: string[] = [];
+
+  for (const { schema, key, label } of WM_SCHEMAS) {
+    if (!(await schemaAvailable(schema))) continue;
+
+    const current = await getCloseKeybindings(schema, key);
+    if (current.includes("<Control>q")) {
+      const updated = current.filter((k) => k !== "<Control>q");
+      const value = `"${JSON.stringify(updated).replace(/"/g, "'")}"`;
+      await runCommand(`gsettings set ${schema} ${key} ${value}`);
+    }
+    applied.push(label);
+  }
+
+  return `Cmd+Q removido do atalho de fechar janelas.\nAtualizado em: ${applied.join(", ")}`;
 }

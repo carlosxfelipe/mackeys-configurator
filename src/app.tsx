@@ -2,7 +2,6 @@ import * as Gtk from "@gtkx/ffi/gtk";
 import {
   GtkApplicationWindow,
   GtkBox,
-  GtkButton,
   GtkLabel,
   quit,
 } from "@gtkx/react";
@@ -12,7 +11,10 @@ import {
   disableMacMode,
   applyAbnt2,
   setupCedilha,
+  setupCmdQ,
+  removeCmdQ,
 } from "./systemInterop.ts";
+import { IconButton } from "./IconButton.tsx";
 
 export const App = () => {
   const [status, setStatus] = useState("Selecione uma ação para começar");
@@ -59,31 +61,46 @@ export const App = () => {
         </GtkBox>
 
         <GtkBox orientation={Gtk.Orientation.VERTICAL} spacing={10}>
-          <GtkButton
-            label="🍎 Ativar Modo macOS (Ctrl ↔ Command)"
-            onClicked={() => handleAction(enableMacMode)}
+          <IconButton
+            iconName="input-keyboard-symbolic"
+            label="Ativar Modo macOS (Ctrl ↔ Command)"
+            onClick={() => handleAction(enableMacMode)}
             cssClasses={["suggested-action", "pill"]}
             sensitive={!isLoading}
           />
 
-          <GtkButton
-            label="🔄 Restaurar Padrão (Ctrl e Alt originais)"
-            onClicked={() => handleAction(disableMacMode)}
-            cssClasses={["pill"]}
+          <IconButton
+            iconName="edit-undo-symbolic"
+            label="Restaurar Padrão (Ctrl e Alt originais)"
+            onClick={() => handleAction(disableMacMode)}
             sensitive={!isLoading}
           />
 
-          <GtkButton
-            label="⌨️ Definir Layout ABNT2"
-            onClicked={() => handleAction(applyAbnt2)}
-            cssClasses={["pill"]}
+          <IconButton
+            iconName="preferences-desktop-keyboard-symbolic"
+            label="Definir Layout ABNT2"
+            onClick={() => handleAction(applyAbnt2)}
             sensitive={!isLoading}
           />
 
-          <GtkButton
-            label="✅ Corrigir Cedilha (´ + c = ç)"
-            onClicked={() => handleAction(setupCedilha)}
-            cssClasses={["pill"]}
+          <IconButton
+            iconName="tools-check-spelling-symbolic"
+            label="Corrigir Cedilha (´ + c = ç)"
+            onClick={() => handleAction(setupCedilha)}
+            sensitive={!isLoading}
+          />
+
+          <IconButton
+            iconName="preferences-desktop-keyboard-shortcuts-symbolic"
+            label="Ativar Cmd+Q para fechar janelas"
+            onClick={() => handleAction(setupCmdQ)}
+            sensitive={!isLoading}
+          />
+
+          <IconButton
+            iconName="edit-clear-symbolic"
+            label="Remover Cmd+Q"
+            onClick={() => handleAction(removeCmdQ)}
             sensitive={!isLoading}
           />
         </GtkBox>
