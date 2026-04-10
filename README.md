@@ -1,33 +1,38 @@
 # Mackeys Configurator
 
-Este projeto é um programa para Linux (Gnome e Cinnamon) que permite ajustar o layout de teclados estilo Apple, como o Logitech K380s, K380, K780, Keychron, entre outros. Ele facilita a personalização das teclas para melhor compatibilidade e usabilidade nesses ambientes.
+Este projeto é um programa para Linux (GNOME e Cinnamon) que permite ajustar o layout de teclados estilo Apple, como o Logitech K380s, K380, K780, Keychron, entre outros. Ele facilita a personalização das teclas para melhor compatibilidade e usabilidade nesses ambientes.
+
+## Funcionalidades
+
+- **Modo macOS** — Troca o Ctrl esquerdo com o Alt esquerdo e aplica o layout US Internacional, replicando o comportamento de digitação dos teclados Apple.
+- **Cmd+Q fecha janelas** — Mapeia `Ctrl+Q` (que com o swap ativo equivale ao `Cmd+Q` físico) como atalho para fechar janelas no GNOME e Cinnamon, igual ao macOS.
+- **Layout ABNT2** — Aplica o layout de teclado brasileiro padrão.
+- **Corrigir Cedilha** — Configura o `~/.XCompose` para que `´ + c` gere `ç` corretamente no layout US Internacional.
+
+## Screenshot
+
+![Tela principal do Mackeys Configurator](assets/screenshot-main.png)
 
 ## Como clonar e rodar o projeto
 
 1. **Clone o repositório:**
 
-```
+```bash
 git clone https://github.com/carlosxfelipe/mackeys-configurator.git
 cd mackeys-configurator
 ```
 
 2. **Instale as dependências:**
 
-```
+```bash
 npm install
 ```
 
 3. **Inicie o ambiente de desenvolvimento:**
 
-```
+```bash
 npm run dev
 ```
-
-O projeto estará disponível para desenvolvimento local.
-
-## Screenshot
-
-![Tela principal do Mackeys Configurator](assets/screenshot-main.png)
 
 ## Como gerar AppImage
 

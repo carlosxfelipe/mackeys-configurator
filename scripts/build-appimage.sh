@@ -33,6 +33,14 @@ cp dist/gtkx.node "$APP_DIR/usr/bin/gtkx.node"
 cp "$APP_ID.desktop" "$APP_DIR/mackeys-configurator.desktop"
 cp assets/icon.png "$APP_DIR/mackeys-configurator.png"
 
+# Install .desktop also in the standard path (required by appstreamcli)
+mkdir -p "$APP_DIR/usr/share/applications"
+cp "$APP_ID.desktop" "$APP_DIR/usr/share/applications/$APP_ID.desktop"
+
+# AppStream metadata — must use the component ID as filename to pass validation
+mkdir -p "$APP_DIR/usr/share/metainfo"
+cp "assets/$APP_ID.appdata.xml" "$APP_DIR/usr/share/metainfo/$APP_ID.appdata.xml"
+
 # 5. Create AppRun (The entry point)
 echo "Creating AppRun..."
 cat > "$APP_DIR/AppRun" <<EOF

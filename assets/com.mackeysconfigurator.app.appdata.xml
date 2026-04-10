@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.mackeysconfigurator.app</id>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+
+  <name>MacKeys Configurator</name>
+  <summary>Configure seu teclado estilo Apple no Linux</summary>
+
+  <description>
+    <p>
+      MacKeys Configurator permite replicar a experiência de digitação do macOS no Linux.
+      Troque Ctrl e Alt esquerdo, aplique o layout US Internacional e configure atalhos
+      como Cmd+Q para fechar janelas.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">com.mackeysconfigurator.app.desktop</launchable>
+
+  <url type="homepage">https://github.com/carlosxfelipe/mackeys-configurator</url>
+  <url type="bugtracker">https://github.com/carlosxfelipe/mackeys-configurator/issues</url>
+
+  <developer id="com.carlosxfelipe">
+    <name>Carlos Felipe</name>
+  </developer>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Janela principal do MacKeys Configurator</caption>
+      <image>https://raw.githubusercontent.com/carlosxfelipe/mackeys-configurator/main/assets/screenshot-main.png</image>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="0.0.2" date="2026-04-10">
+      <description>
+        <p>Adição de ícones nativos do GNOME e melhorias na interface.</p>
+      </description>
+    </release>
+    <release version="0.0.1" date="2026-03-14">
+      <description>
+        <p>Versão inicial com suporte a Modo macOS, Cedilha e Cmd+Q.</p>
+      </description>
+    </release>
+  </releases>
+
+  <content_rating type="oars-1.1"/>
+</component>
